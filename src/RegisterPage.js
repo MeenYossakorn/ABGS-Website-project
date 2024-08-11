@@ -6,8 +6,8 @@ const RegisterPage = () => {
     surname: "",
     email: "",
     telephone: "",
-    password: "",
     username: "",
+    password: "",
   });
   const [keepSignedIn, setKeepSignedIn] = useState(false);
 
