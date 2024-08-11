@@ -1,5 +1,6 @@
-import image3d from "../../assets/image3d.png";
+import React from "react";
 import test1 from "../../assets/test1.png";
+
 
 export default function Content() {
   return (
@@ -17,7 +18,7 @@ export default function Content() {
 
           <div className="lg:w-1/2 flex justify-center ">
             <img
-              src={image3d}
+              src="https://www.ไม้แขนกั้นรถ.com/wp-content/uploads/2018/08/6.jpg"
               alt="Example"
               className="w-full max-w-[1000px] rounded-lg "
             />

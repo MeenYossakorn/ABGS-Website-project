@@ -1,4 +1,7 @@
-export default function Navbar() {
+import React from "react";
+import { Link } from "react-router-dom";
+
+const Navbar = () => {
   return (
     //Navbar space
     <div className="navbar bg-blue">
@@ -26,23 +29,32 @@ export default function Navbar() {
             className="menu menu-lg dropdown-content bg-base-100 rounded-box z-[1] mt-1 w-60 p-2 shadow"
           >
             <li>
-              <a class="flex justify-center">MAIN</a>
+              <Link to="/" class="flex justify-center">
+                MAIN
+              </Link>
             </li>
 
             <li>
-              <a class="flex justify-center">MY PROFILE</a>
+              <Link to="#" class="flex justify-center">
+                MY PROFILE
+              </Link>
             </li>
 
             <li>
-              <a class="flex justify-center">MY CAR</a>
+              <Link to="#" class="flex justify-center">
+                MY CAR
+              </Link>
             </li>
 
             <li>
-              <a class="flex justify-center">LOGOUT</a>
+              <Link to="/loginpage" className="flex justify-center">
+                LOGOUT
+              </Link>
             </li>
           </ul>
         </div>
       </div>
     </div>
   );
-}
+};
+export default Navbar;

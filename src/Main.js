@@ -1,14 +1,12 @@
-import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer";
 import Content from "./components/Content/Content";
+import Footer from "./components/Footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
 
 export default function Main() {
   return (
     <>
       <Navbar />
-
       <Content />
-
       <Footer />
     </>
   );
