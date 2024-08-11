@@ -26,15 +26,15 @@ export default function Navbar() {
             className="menu menu-lg dropdown-content bg-base-100 rounded-box z-[1] mt-1 w-60 p-2 shadow"
           >
             <li>
-              <a class="flex justify-center">MAIN</a>
+              <a class="flex justify-center"  >MAIN</a>
             </li>
 
             <li>
-              <a class="flex justify-center">MY PROFILE</a>
+              <a class="flex justify-center" href="/Profilecontent.js">MY PROFILE</a>
             </li>
 
             <li>
-              <a class="flex justify-center">MY CAR</a>
+              <a class="flex justify-center" >MY CAR</a>
             </li>
 
             <li>
