@@ -4,7 +4,7 @@ import test1 from "../../assets/test1.png";
 export default function Content() {
   return (
     <>
-      <div className="container mx-auto max-w-[1800px]">
+      <div className="container mx-auto max-w-[1600px]">
         <div className="flex flex-col lg:flex-row lg:justify-between gap-[44px] p-5 py-10  lg:py-10 lg:px-10 lg:pb-20 lg:items-center lg:gap-5">
           <div className="flex flex-col justify-center lg:w-1/2">
             <h1 className="text-4xl font-bold text-black mb-2">Welcome !</h1>
