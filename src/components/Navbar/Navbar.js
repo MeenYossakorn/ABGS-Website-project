@@ -2,11 +2,25 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const scrollToTop = () => {
+    const scrollStep = -window.scrollY / (1000 / 15);
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  };
+
   return (
     //Navbar space
-    <div className="navbar bg-blue">
+    <div className="navbar bg-blue sticky top-0 z-50 shadow-md">
       <div className="flex-1">
-        <a className="btn btn-ghost text-white text-xl">
+        <a
+          className="btn btn-ghost text-white text-xl cursor-pointer"
+          onClick={scrollToTop}
+        >
           AUTOMATIC BARRIER GATE SYSTEM
         </a>
       </div>
