@@ -73,12 +73,14 @@ const LoginPage = ({ onLogin }) => {
                 FORGET YOUR PASSWORD
               </a>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-blue text-white p-2 rounded-xl font-bold"
-            >
-              LOGIN
-            </button>
+            <div className="flex justify-center mt-4">
+              <button
+                type="submit"
+                className="bg-blue hover:bg-blue text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                LOGIN
+              </button>
+            </div>
           </form>
           <p className="mt-6 text-center font-semibold text-sm">
             DON'T HAVE AN ACCOUNT

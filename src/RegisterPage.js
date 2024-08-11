@@ -86,9 +86,9 @@ const RegisterPage = () => {
               </label>
             </div>
 
-            <div className="flex items-center justify-center mt-2">
+            <div className="flex items-center justify-center mt-2 ">
               <button
-                className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline"
+                className="bg-blue hover:bg-blue-600 text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105"
                 type="submit"
               >
                 SIGN UP
