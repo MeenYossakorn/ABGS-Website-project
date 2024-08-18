@@ -1,7 +1,6 @@
 import React from "react";
 import test1 from "../../assets/test1.png";
 
-
 export default function Content() {
   return (
     <>

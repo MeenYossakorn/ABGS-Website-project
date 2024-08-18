@@ -9,6 +9,8 @@ import LoginPage from "./LoginPage";
 import Main from "./Main";
 import RegisterPage from "./RegisterPage";
 import ErrorPage from "./ErrorPage";
+import Profile from "./Profile";
+import CarInfo from "./CarInfo";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
   {
     path: "/loginpage",
     element: <LoginPage />,
+  },
+  {
+    path: "/Profile",
+    element: <Profile />,
+  },
+  {
+    path: "/CarInfo",
+    element: <CarInfo />,
   },
 ]);
 
