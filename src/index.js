@@ -8,15 +8,15 @@ import reportWebVitals from "./reportWebVitals";
 import LoginPage from "./LoginPage";
 import Main from "./Main";
 import RegisterPage from "./RegisterPage";
-import ErrorPage from "./ErrorPage";
 import Profile from "./Profile";
 import CarInfo from "./CarInfo";
+import RegisterCar from "./RegisterCar";
+import Report from "./Report";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
-    errorElement: <ErrorPage />,
   },
   {
     path: "/registerpage",
@@ -33,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: "/CarInfo",
     element: <CarInfo />,
+  },
+  {
+    path: "/RegisterCar",
+    element: <RegisterCar />,
+  },
+  {
+    path: "/Report",
+    element: <Report />,
   },
 ]);
 

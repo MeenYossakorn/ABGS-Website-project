@@ -1,5 +1,6 @@
 import React from "react";
 import test1 from "../../assets/test1.png";
+import { Link } from "react-router-dom";
 
 export default function Content() {
   return (
@@ -81,6 +82,28 @@ export default function Content() {
                 </div>
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto ">
+        <div className="flex flex-col lg:flex-row lg:justify-center p-5 py-6  lg:py-5 lg:px-5 lg:pb-20 lg:items-center ">
+          <div className="flex flex-col justify-center lg:w-1/2">
+            <h1 className="text-4xl font-bold text-black mb-2 text-center">
+              Register Now
+            </h1>
+            <div className="flex justify-center p-4 ">
+              <Link
+                to="/RegisterCar"
+                className="bg-blue hover:bg-blue text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                REGISTER
+              </Link>
+            </div>
+            <p className="text-sm text-black text-center">
+              “ Before registering car information, please log in first. “
+              <br />
+            </p>
           </div>
         </div>
       </div>

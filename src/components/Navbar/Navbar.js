@@ -19,21 +19,22 @@ const Navbar = () => {
     <>
       <div className="navbar bg-blue sticky top-0 z-50 shadow-md">
         <div className="flex-1">
-          <div
-            className="btn btn-ghost text-white text-xl  "
+          <Link
+            to="/"
+            className="btn btn-ghost text-white text-xl"
             onClick={scrollToTop}
           >
             AUTOMATIC BARRIER GATE SYSTEM
-          </div>
+          </Link>
         </div>
 
-        <div className="flex-none">
+        <div className="flex-none flex items-center space-x-4">
           <Link to="/Profile" className="btn btn-ghost text-white text-xl">
             SOMRAK JAIDEE
           </Link>
           <button
-            onClick={() => setIsOpen(true)}
-            className="btn btn-ghost btn-circle avatar flex items-center space-x-4 p-2"
+            onClick={() => setIsOpen(!isOpen)}
+            className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
               <img
@@ -47,7 +48,7 @@ const Navbar = () => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsOpen(false)}
         ></div>
       )}
@@ -64,6 +65,7 @@ const Navbar = () => {
                 <Link
                   to="/Profile"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
+                  onClick={() => setIsOpen(false)}
                 >
                   MY PROFILE
                 </Link>
@@ -73,6 +75,7 @@ const Navbar = () => {
                 <Link
                   to="/CarInfo"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
+                  onClick={() => setIsOpen(false)}
                 >
                   MY CAR
                 </Link>
@@ -80,8 +83,29 @@ const Navbar = () => {
               <div className="border-b"></div>
               <li>
                 <Link
+                  to="/RegisterCar"
+                  className="block py-2 px-4 hover:bg-gray-100 text-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  REGISTER
+                </Link>
+              </li>
+              <div className="border-b"></div>
+              <li>
+                <Link
+                  to="/Report"
+                  className="block py-2 px-4 hover:bg-gray-100 text-center"
+                  onClick={() => setIsOpen(false)}
+                >
+                  REPORT
+                </Link>
+              </li>
+              <div className="border-b"></div>
+              <li>
+                <Link
                   to="/loginpage"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
+                  onClick={() => setIsOpen(false)}
                 >
                   LOGOUT
                 </Link>
