@@ -53,9 +53,7 @@ const CarInfo = () => {
                   </th>
                   <th className="px-2 whitespace-nowrap text-center">BRAND</th>
                   <th className="px-2 whitespace-nowrap text-center">COLOR</th>
-                  <th className="px-2 whitespace-nowrap text-center">
-                    PLATE RECOGNITION
-                  </th>
+                  <th className="px-2 whitespace-nowrap text-center">EXPIRE</th>
                 </tr>
               </thead>
 

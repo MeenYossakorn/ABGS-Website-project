@@ -1,24 +1,44 @@
+// LoginPage component (แยกไฟล์)
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically validate the credentials against a backend
-    // For this example, we'll just check if both fields are filled
-    if (username && password) {
-      onLogin({ username, keepSignedIn });
-    } else {
-      alert("Please enter both username and password");
+    setError("");
+
+    try {
+      // จำลองการเรียก API
+      const response = await mockLoginAPI(username, password);
+      if (response.success) {
+        onLogin({ username, keepSignedIn });
+        navigate("/");
+      } else {
+        setError("Login failed. Please check your credentials.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      console.error(err);
     }
   };
 
+  // ฟังก์ชันจำลองการเรียก API
+  const mockLoginAPI = (username, password) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ success: username === "test" && password === "test" });
+      }, 1000);
+    });
+  };
+
   return (
-    <div className="flex h-screen bg-gradient-to-r from-blue to-white  w-full">
+    <div className="flex h-screen bg-gradient-to-r from-blue to-white w-full">
       {/* Left side */}
       <div className="w-3/5 flex items-center justify-center text-white p-12">
         <div>
@@ -38,24 +58,25 @@ const LoginPage = ({ onLogin }) => {
             Please log in to gain access. If you don't have an account yet you
             can register below
           </p>
+          {error && <p className="text-red mb-4">{error}</p>}
           <form onSubmit={handleSubmit}>
-            <div className="block text-gray-700 text-md font-semibold mb-2">
+            <div className="block text-gray-700 text-xs font-semibold mb-2">
               Username
             </div>
             <input
               type="text"
               placeholder="USERNAME"
-              className="w-full p-2 mb-4 bg-base-200 rounded-lg"
+              className="w-full p-1 mb-1 bg-base-200 rounded-lg"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <div className="block text-gray-700 text-md font-semibold mb-2">
+            <div className="block text-gray-700 text-xs font-semibold mb-2">
               Password
             </div>
             <input
               type="password"
               placeholder="PASSWORD"
-              className="w-full p-2 mb-4 bg-base-200 rounded-lg"
+              className="w-full p-1 mb-1 bg-base-200 rounded-lg"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -69,9 +90,9 @@ const LoginPage = ({ onLogin }) => {
                 />
                 <span>KEEP ME SIGNED IN</span>
               </label>
-              <a href="#" className="text-black">
+              <Link to="/forgot-password" className="text-black">
                 FORGET YOUR PASSWORD
-              </a>
+              </Link>
             </div>
             <div className="flex justify-center mt-4">
               <button
