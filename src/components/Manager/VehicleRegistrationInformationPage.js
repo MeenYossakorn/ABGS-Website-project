@@ -1,7 +1,7 @@
 import React from "react";
 import Menubar from "./Menubar";
 
-const VehicleRegistrationInformation = () => {
+const VehicleRegistrationInformationPage = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       <Menubar />
@@ -33,4 +33,4 @@ const VehicleRegistrationInformation = () => {
   );
 };
 
-export default VehicleRegistrationInformation;
+export default VehicleRegistrationInformationPage;
