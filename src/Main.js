@@ -1,10 +1,10 @@
-import ManagerPage from "./components/Manager/ManagerPage";
+import UserRequestPage from "./components/Manager/UserRequestPage";
 
 export default function Main() {
 
   return (
     <>
-      <ManagerPage />
+      <UserRequestPage />
     </>
   );
 }

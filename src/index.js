@@ -12,6 +12,10 @@ import Profile from "./Profile";
 import CarInfo from "./CarInfo";
 import RegisterCar from "./RegisterCar";
 import Report from "./Report";
+import UserInformationPage from "./components/Manager/UserInformationPage";
+import UserRequestPage from "./components/Manager/UserRequestPage";
+import VehicleInformation from "./components/Manager/VehicleInformationPage";
+import VehicleRegistrationInformation from "./components/Manager/VehicleRegistrationInformationPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +45,22 @@ const router = createBrowserRouter([
   {
     path: "/Report",
     element: <Report />,
+  },
+  {
+    path: "/UserInformationPage",
+    element: <UserInformationPage />,
+  },
+  {
+    path: "/UserRequestPage",
+    element: <UserRequestPage />,
+  },
+  {
+    path: "/VehicleInformationPage",
+    element: <VehicleInformation />,
+  },
+  {
+    path: "/VehicleRegistrationInformationPage",
+    element: <VehicleRegistrationInformation />,
   },
 ]);
 
