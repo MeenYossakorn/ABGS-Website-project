@@ -16,6 +16,7 @@ import UserInformationPage from "./components/Manager/UserInformationPage";
 import UserRequestPage from "./components/Manager/UserRequestPage";
 import VehicleInformation from "./components/Manager/VehicleInformationPage";
 import VehicleRegistrationInformation from "./components/Manager/VehicleRegistrationInformationPage";
+import Home from "./Home";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
     path: "/VehicleRegistrationInformationPage",
     element: <VehicleRegistrationInformation />,
   },
+  {
+    path: "/home",
+      element: <Home />,
+  }
+
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

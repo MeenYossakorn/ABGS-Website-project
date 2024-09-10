@@ -1,13 +1,13 @@
-import Content from "./components/Content/Content";
-import Navbar from "./components/Navbar/Navbar.js";
-import Footer from "./components/Footer/Footer.js";
-import Home from "./Home";
+
+import RegisterPage from "./RegisterPage.js";
+import Home from "./Home.js";
 
 export default function Main() {
 
   return (
     <>
-      <Home/>
+    
+      <RegisterPage/>
     </>
   );
 }

@@ -1,15 +1,24 @@
 import React, { useState } from "react";
+import { Navigate, replace, useNavigate } from "react-router-dom";
+import Home from "./Home";
+import { auth } from "./Auth/firebase";
+
+
+
+import { doCreateUserWithEmailAndPassword } from "./Auth/Auth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    surname: "",
+    // name: "",
+    // surname: "",
     email: "",
-    telephone: "",
-    username: "",
+    // telephone: "",
+    // username: "",
     password: "",
   });
+
   const [keepSignedIn, setKeepSignedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -19,14 +28,40 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted", formData, keepSignedIn);
+
+    const hasLetters = /[a-zA-Z]/.test(formData.password);
+    if (formData.password.length < 6) {
+      alert("รหัสผ่านต้องมีความยาวมากกว่า 6 ตัวอักษร");
+      return;
+    }
+    if (!hasLetters) {
+      alert("รหัสผ่านต้องประกอบด้วยตัวอักษรอย่างน้อย 1 ตัว");
+      return;
+    }
+    if (formData.email.length < 1) {
+      alert("กรุณากรอกอีเมล");
+      return;
+    }
+
+    try {
+      await doCreateUserWithEmailAndPassword(formData.email, formData.password);
+      // เมื่อการลงทะเบียนสำเร็จ เราจะนำทางผู้ใช้ไปยังหน้า Home
+      navigate('/home');
+    } catch (error) {
+      // จัดการกับ error ที่อาจเกิดขึ้น เช่น ข้อมูลไม่ถูกต้อง
+      console.error("Error in registration: ", error.message);
+      alert("Registration failed: " + error.message);
+    }
   };
 
+
   return (
+    <div>
+      
     <div className="flex min-h-screen bg-gradient-to-r from-blue to-white w-full">
+     
       {/* Left Section */}
       <div className="w-3/5 flex items-center justify-center text-white p-12">
         <div>
@@ -43,6 +78,7 @@ const RegisterPage = () => {
       <div className="w-2/5 bg-white flex items-center justify-center rounded-l-2xl">
         <div className="w-6/6 max-w-sm">
           <h2 className="text-2xl font-bold mb-3 text-center">SIGN UP</h2>
+
           <form className="w-full max-w-md" onSubmit={handleSubmit}>
             {Object.entries(formData).map(([key, value]) => (
               <div className="mb-1" key={key}>
@@ -71,16 +107,18 @@ const RegisterPage = () => {
 
             <div className="mt-3 text-center text-xs">
               <label className="flex items-center justify-center">
-                <input
+                {/* <input
                   type="checkbox"
                   className="mr-2"
                   checked={keepSignedIn}
                   onChange={(e) => setKeepSignedIn(e.target.checked)}
-                />
+                /> */}
+
                 <span className="font-semibold">
-                  BY SIGNING UP I AGREE WITH{" "}
+                  --------------------------------------------------------------
+                  {/* BY SIGNING UP I AGREE WITH{" "} */}
                   <span className="font-semibold text-blue underline">
-                    TERMS & CONDITIONS
+                    {/* TERMS & CONDITIONS */}
                   </span>
                 </span>
               </label>
@@ -97,6 +135,7 @@ const RegisterPage = () => {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 };
