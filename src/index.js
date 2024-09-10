@@ -5,23 +5,23 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 //page components
-import LoginPage from "./LoginPage";
+import LoginPage from "./component/LoginPage/LoginPage";
 import Main from "./Main";
-import RegisterPage from "./RegisterPage";
-import Profile from "./Profile";
-import CarInfo from "./CarInfo";
-import RegisterCar from "./RegisterCar";
+import RegisterPage from "./component/LoginPage/RegisterPage";
+import Profile from "./components/UserMainPage/Profile";
+import CarInfo from "./components/UserMainPage/CarInfo";
+import RegisterCar from "./components/UserMainPage/RegisterCar";
 import Report from "./Report";
-import UserInformationPage from "./components/Manager/UserInformationPage";
-import UserRequestPage from "./components/Manager/UserRequestPage";
-import VehicleInformation from "./components/Manager/VehicleInformationPage";
-import VehicleRegistrationInformation from "./components/Manager/VehicleRegistrationInformationPage";
+import UserInformationPage from "./components/ManagerMainPage/UserInformationPage";
+import UserRequestPage from "./components/ManagerMainPage/UserRequestPage";
+import VehicleInformation from "./components/ManagerMainPage/VehicleInformationPage";
+import VehicleRegistrationInformation from "./components/ManagerMainPage/VehicleRegistrationInformationPage";
 import Home from "./Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <Main/>,
   },
   {
     path: "/registerpage",

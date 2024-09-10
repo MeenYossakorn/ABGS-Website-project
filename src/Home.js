@@ -1,6 +1,6 @@
-import Content from "./components/UserMainPage/Content.js";
-import Navbar from "./components/UserMainPage/Navbar/Navbar.js";
-import Footer from "./components/UserMainPage/Footer/Footer.js";
+import Content from "./UserMainPage/Content.js"
+import Navbar from "./components/Navbar/Navbar.js";
+import Footer from "./components/Footer/Footer.js";
 import { auth } from "./Auth/firebase.js";
 
 export default function Home() {

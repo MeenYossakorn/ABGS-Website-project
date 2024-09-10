@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Navigate, replace, useNavigate } from "react-router-dom";
-import Home from "./Home";
-import { auth } from "./Auth/firebase";
 
-
-
-import { doCreateUserWithEmailAndPassword } from "./Auth/Auth";
+import doCreateUserWithEmailAndPassword from "../Auth/Auth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
