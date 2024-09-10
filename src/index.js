@@ -21,7 +21,7 @@ import Home from "./Home";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <Main/>,
   },
   {
     path: "/registerpage",

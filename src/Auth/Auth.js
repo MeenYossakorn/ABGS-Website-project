@@ -20,15 +20,16 @@ export const doSignOut = () => {
     return auth.signOut();
 };
 
-export const doPasswordReset = (email) => {
-    return sendPasswordResetEmail(auth,email);
-};
-export const doPasswordChange = (password) => {
-    return updatePassword(auth.currentUser,password);
-};
+// export const doPasswordReset = (email) => {
+//     return sendPasswordResetEmail(auth,email);
+// };
+// export const doPasswordChange = (password) => {
+//     return updatePassword(auth.currentUser,password);
+// };
 
-export const doSendEmailVerification = () =>{
-    return sendEmailVerification(auth.currentUser,{
-        url:`${window.location.origin}/Home`,
-    });
-};
+// export const doSendEmailVerification = () =>{
+//     return sendEmailVerification(auth.currentUser,{
+//         url:`${window.location.origin}/Home`,
+//     }
+// );
+// };
