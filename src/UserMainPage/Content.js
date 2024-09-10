@@ -1,5 +1,5 @@
 import React from "react";
-import test1 from "../../assets/images/test1.png";
+import test1 from "../../src/assets/images/test1.png";
 import { Link } from "react-router-dom";
 
 export default function Content() {
