@@ -1,6 +1,6 @@
 import Content from "./UserMainPage/Content.js"
-import Navbar from "./components/Navbar/Navbar.js";
-import Footer from "./components/Footer/Footer.js";
+import Navbar from "./UserMainPage/Navbar/Navbar";
+import Footer from "./UserMainPage/Footer/Footer";
 import { auth } from "./Auth/firebase.js";
 
 

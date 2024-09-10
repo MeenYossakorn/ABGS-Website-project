@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
@@ -12,7 +11,7 @@ const firebaseConfig = {
   storageBucket: "car-project-ed264.appspot.com",
   messagingSenderId: "203650435065",
   appId: "1:203650435065:web:a55cb3c02bda1259a49f28",
-  measurementId: "G-QC2C4FXLGD"
+  measurementId: "G-QC2C4FXLGD",
 };
 
 // Initialize Firebase
@@ -21,5 +20,4 @@ const analytics = getAnalytics(app);
 const firestore = getFirestore(app);
 const auth = getAuth(app);
 
-export {analytics,firestore,auth};
-
+export { analytics, firestore, auth };

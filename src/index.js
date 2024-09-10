@@ -5,17 +5,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 //page components
-import LoginPage from "./LoginPage";
+import LoginPage from "./LoginPage/LoginPage";
 import Main from "./Main";
-import RegisterPage from "./RegisterPage";
-import Profile from "./Profile";
-import CarInfo from "./CarInfo";
-import RegisterCar from "./RegisterCar";
+import RegisterPage from "./LoginPage/RegisterPage";
+import Profile from "./UserMainPage/Profile";
+import CarInfo from "./UserMainPage/CarInfo";
+import RegisterCar from "./UserMainPage/RegisterCar";
 import Report from "./Report";
-import UserInformationPage from "./components/Manager/UserInformationPage";
-import UserRequestPage from "./components/Manager/UserRequestPage";
-import VehicleInformation from "./components/Manager/VehicleInformationPage";
-import VehicleRegistrationInformation from "./components/Manager/VehicleRegistrationInformationPage";
+import UserInformationPage from "./ManagerMainPage/UserInformationPage";
+import UserRequestPage from "./ManagerMainPage/UserRequestPage";
+import VehicleInformation from "./ManagerMainPage/VehicleInformationPage";
+import VehicleRegistrationInformation from "./ManagerMainPage/VehicleRegistrationInformationPage";
 import Home from "./Home";
 
 const router = createBrowserRouter([

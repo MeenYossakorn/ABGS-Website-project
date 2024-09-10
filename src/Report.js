@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "./components/Navbar/Navbar.js";
-import Footer from "./components/Footer/Footer.js";
+import Navbar from "./UserMainPage/Navbar/Navbar";
+import Footer from "./UserMainPage/Footer/Footer";
 
 const Report = () => {
   const [formData, setFormData] = useState({
