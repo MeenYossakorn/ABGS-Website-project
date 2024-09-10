@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import mailIcon from "./Images/mail.png";
-import AddressBook from "./Images/address-book.png";
-import AngleSmall from "./Images/angle-small-right.png";
-import TruckSide from "./Images/truck-side.png";
-import CarLogo from "./Images/Car-brg.png";
+import mailIcon from "../Manager/Images/mail.png";
+import AddressBook from "../Manager/Images/address-book.png";
+import AngleSmall from "../Manager/Images/angle-small-right.png";
+import TruckSide from "../Manager/Images/truck-side.png";
+import CarLogo from "../Manager/Images/Car-brg.png";
 
 const Menubar = () => {
   return (
