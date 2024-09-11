@@ -20,7 +20,7 @@ const Navbar = () => {
       <div className="navbar bg-blue sticky top-0 z-50 shadow-md">
         <div className="flex-1">
           <Link
-            to="/"
+            to="/home"
             className="btn btn-ghost text-white text-xl"
             onClick={scrollToTop}
           >

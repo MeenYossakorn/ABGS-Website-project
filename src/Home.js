@@ -6,9 +6,10 @@ import { auth } from "./Auth/firebase.js";
 
 
 export default function Home() {
-
+  
   return (
     <>
+    
      <div>
       {auth.currentUser.email ? (
         <p>Email: {auth.currentUser.email}</p>

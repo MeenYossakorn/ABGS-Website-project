@@ -20,6 +20,10 @@ import Home from "./Home";
 
 const router = createBrowserRouter([
   {
+    path: "*",
+    element: <LoginPage />,
+  },
+  {
     path: "/",
     element: <Main/>,
   },
