@@ -1,10 +1,14 @@
-import UserRequestPage from "./components/Manager/UserRequestPage";
+import Navbar from "./components/Navbar/Navbar";
+import Content from "./components/Content/Content"
+import Footer from "./components/Footer/Footer";
 
 export default function Main() {
 
   return (
     <>
-      <UserRequestPage />
+      <Navbar />
+      <Content />
+      <Footer/>
     </>
   );
 }
