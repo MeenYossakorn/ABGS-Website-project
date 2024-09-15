@@ -1,7 +1,11 @@
 //react router dom
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 //page components
@@ -17,39 +21,37 @@ import UserRequestPage from "./ManagerMainPage/UserRequestPage";
 import VehicleInformation from "./ManagerMainPage/VehicleInformationPage";
 import VehicleRegistrationInformation from "./ManagerMainPage/VehicleRegistrationInformationPage";
 import Home from "./Home";
+import Logout from "./LoginPage/Logout";
+import PrivateRoute from "./Auth/PrivateRoute";
 
 const router = createBrowserRouter([
   {
-    path: "*",
-    element: <LoginPage />,
-  },
-  {
     path: "/",
-    element: <Main/>,
+    element: <Main />,
   },
   {
     path: "/registerpage",
-    element: <RegisterPage />,
+    element: <PrivateRoute element={<RegisterPage />} a={true} />,
   },
   {
     path: "/loginpage",
-    element: <LoginPage />,
+    element: <PrivateRoute element={<LoginPage />} a={true} />,
   },
   {
     path: "/Profile",
-    element: <Profile />,
+    element: <PrivateRoute element={<Profile />} a={false} />,
   },
   {
     path: "/CarInfo",
-    element: <CarInfo />,
+    element: <PrivateRoute element={<CarInfo />} a={false} />,
   },
   {
     path: "/RegisterCar",
-    element: <RegisterCar />,
+    element: <PrivateRoute element={<RegisterCar />} a={false} />,
   },
   {
     path: "/Report",
-    element: <Report />,
+    element: <PrivateRoute element={<Report />} a={false} />,
   },
   {
     path: "/UserInformationPage",
@@ -69,9 +71,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-      element: <Home />,
-  }
-
+    element: <Home />,
+  },
+  {
+    path: "/Logout",
+    element: <Logout />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

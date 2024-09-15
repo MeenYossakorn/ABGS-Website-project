@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from "../Auth/Auth";
-import { useAuth } from "../Auth";
+import { db } from "../Auth/firebase";
+import { setDoc, doc } from "firebase/firestore";
 import { auth } from "../Auth/firebase";
+import useAuth from "../Auth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -13,10 +15,11 @@ const RegisterPage = () => {
     // username: "",
     password: "",
   });
+  const { updateUser } = useAuth();
+  
   const [error, setError] = useState("");
-  const [keepSignedIn, setKeepSignedIn] = useState(false);
+  // const [keepSignedIn, setKeepSignedIn] = useState(false);
   const navigate = useNavigate();
-  const { userLoggedIn = false } = useAuth() || {};
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -28,20 +31,24 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const hasLetters = /[a-zA-Z]/.test(formData.password);
     try {
-      if (!keepSignedIn) {
-        setKeepSignedIn(true);
-        await doCreateUserWithEmailAndPassword(
-          formData.email,
-          formData.password
-        );
-        navigate("/home");
-      }
-      else {
-        setError("Register failed. Please check your credentials.");
-      }
+      const userCredential = await doCreateUserWithEmailAndPassword(
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+      
+      updateUser(user);
+
+      // บันทึกข้อมูลลง Firestore
+
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        createdAt: new Date(),
+      });
+
+      navigate("/home");
     } catch (err) {
       setError("An error occurred. Please try again.");
       console.error(err);
@@ -50,7 +57,6 @@ const RegisterPage = () => {
 
   return (
     <>
-      {userLoggedIn && <Navigate to={"/home"} replace={true} />}
       <div className="flex min-h-screen bg-gradient-to-r from-blue to-white w-full">
         {/* Left Section */}
         <div className="w-3/5 flex items-center justify-center text-white p-12">

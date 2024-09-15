@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { doSignOut } from "../../Auth/Auth";
+import Logout from "../../LoginPage/Logout";
+import useAuth from "../../Auth";
+// import { useUser } from "../../Auth/userContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +19,22 @@ const Navbar = () => {
     }, 15);
   };
 
+  const { user } = useAuth();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    doSignOut() // ฟังก์ชันสำหรับ sign out ผู้ใช้
+      .then(() => {
+        setIsOpen(false); // ปิดเมนูหรือ modal ที่เปิดอยู่ (ถ้ามี)
+        navigate("/loginpage"); // นำทางไปยังหน้า login
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+      });
+  };
+  // const { user } = useUser();
+
   return (
     <>
       <div className="navbar bg-blue sticky top-0 z-50 shadow-md">
@@ -28,22 +48,36 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex-none flex items-center space-x-4">
-          <Link to="/Profile" className="btn btn-ghost text-white text-xl">
-            SOMRAK JAIDEE
-          </Link>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                alt="Avatar"
-              />
-            </div>
-          </button>
-        </div>
+        <Logout />
+        
+        {user ? (
+          <div className="flex-none flex items-center space-x-4">
+            <Link to="/Profile" className="btn btn-ghost text-white text-xl">
+              SOMRAK JAIDEE
+            </Link>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  alt="Avatar"
+                />
+              </div>
+            </button>
+          </div>
+        ) : (
+          <div className="flex-none flex items-center space-x-4">
+            <Link
+              to="/loginpage"
+              className="btn btn-ghost text-white text-xl"
+              onClick={scrollToTop}
+            >
+              Login
+            </Link>
+          </div>
+        )}
       </div>
 
       {isOpen && (
@@ -103,9 +137,9 @@ const Navbar = () => {
               <div className="border-b"></div>
               <li>
                 <Link
-                  to="/loginpage"
+                  to="#"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleLogout}
                 >
                   LOGOUT
                 </Link>

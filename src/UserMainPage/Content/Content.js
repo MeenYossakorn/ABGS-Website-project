@@ -3,6 +3,9 @@ import test1 from "../../assets/images/test1.png";
 import { Link } from "react-router-dom";
 
 export default function Content() {
+
+  
+
   return (
     <>
       <div className="container mx-auto max-w-[1600px]">
@@ -107,6 +110,7 @@ export default function Content() {
           </div>
         </div>
       </div>
+      
     </>
   );
 }

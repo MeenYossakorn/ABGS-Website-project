@@ -1,40 +1,31 @@
 // LoginPage component (แยกไฟล์)
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { doSignInWithEmailAndPassword } from "../Auth/Auth";
+import useAuth from "../Auth";
+
 
 const LoginPage = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
+  const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [keepSignedIn, setKeepSignedIn] = useState(false);
+  // const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { updateUser } = useAuth();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
     try {
-      // จำลองการเรียก API
-      const response = await mockLoginAPI(username, password);
-      if (response.success) {
-        onLogin({ username, keepSignedIn });
-        navigate("/");
-      } else {
-        setError("Login failed. Please check your credentials.");
-      }
+      const userCredential = await doSignInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      updateUser(user);
+      
+      navigate("/home");
     } catch (err) {
       setError("An error occurred. Please try again.");
       console.error(err);
     }
-  };
-
-  // ฟังก์ชันจำลองการเรียก API
-  const mockLoginAPI = (username, password) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ success: username === "test" && password === "test" });
-      }, 1000);
-    });
   };
 
   return (
@@ -61,13 +52,13 @@ const LoginPage = ({ onLogin }) => {
           {error && <p className="text-red mb-4">{error}</p>}
           <form onSubmit={handleSubmit}>
             <div className="block text-gray-700 text-xs font-semibold mb-2">
-              Username
+              Email
             </div>
             <input
               type="text"
-              placeholder="USERNAME"
+              placeholder="Email"
               className="w-full p-1 mb-1 bg-base-200 rounded-lg"
-              value={username}
+              value={email}
               onChange={(e) => setUsername(e.target.value)}
             />
             <div className="block text-gray-700 text-xs font-semibold mb-2">
@@ -80,7 +71,7 @@ const LoginPage = ({ onLogin }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="flex justify-between items-center mb-6 text-sm">
+            {/* <div className="flex justify-between items-center mb-6 text-sm">
               <label className="flex items-center">
                 <input
                   type="checkbox"
@@ -93,7 +84,7 @@ const LoginPage = ({ onLogin }) => {
               <Link to="/forgot-password" className="text-black">
                 FORGET YOUR PASSWORD
               </Link>
-            </div>
+            </div> */}
             <div className="flex justify-center mt-4">
               <button
                 type="submit"
