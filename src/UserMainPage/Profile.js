@@ -2,8 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
+import UserProfile from "../Database/Profiledb";
 
 const Profile = () => {
+  const {userData} = UserProfile();
+
   return (
     <>
       <Navbar />
@@ -27,7 +30,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
-              value=""
+              value={userData ? userData.name : "Loading..."}
               readOnly
               className="mt-1 block w-full px-3 py-2 bg-base-200  border-gray-300 rounded-md shadow-sm focus:outline-none "
             />
@@ -38,7 +41,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
-              value=""
+              value={userData ? userData.surname : "Loading..."}
               readOnly
               className="mt-1 block w-full px-3 py-2 bg-base-200  border-gray-300 rounded-md shadow-sm focus:outline-none "
             />
@@ -49,7 +52,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
-              value=""
+              value={userData ? userData.telephone : "Loading..."}
               readOnly
               className="mt-1 block w-full px-3 py-2 bg-base-200  border-gray-300 rounded-md shadow-sm focus:outline-none "
             />
@@ -60,7 +63,7 @@ const Profile = () => {
             </label>
             <input
               type="email"
-              value=""
+              value={userData ? userData.email : "Loading..."}
               readOnly
               className="mt-1 block w-full px-3 py-2 bg-base-200  border-gray-300 rounded-md shadow-sm focus:outline-none "
             />

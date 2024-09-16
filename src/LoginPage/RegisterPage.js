@@ -8,15 +8,14 @@ import useAuth from "../Auth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    // name: "",
-    // surname: "",
+    name: "",
+    surname: "",
     email: "",
-    // telephone: "",
-    // username: "",
+    telephone: "",
     password: "",
   });
   const { updateUser } = useAuth();
-  
+
   const [error, setError] = useState("");
   // const [keepSignedIn, setKeepSignedIn] = useState(false);
   const navigate = useNavigate();
@@ -29,25 +28,31 @@ const RegisterPage = () => {
     }));
   };
 
+  const isFormEmpty = () => {
+    return Object.values(formData).some((value) => value === "");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (isFormEmpty()) {
+        throw new Error("please fill in all fields.");
+      }
+
       const userCredential = await doCreateUserWithEmailAndPassword(
         formData.email,
         formData.password
       );
-
       const user = userCredential.user;
-      
       updateUser(user);
-
       // บันทึกข้อมูลลง Firestore
-
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
         createdAt: new Date(),
+        name: formData.name || "",
+        surname: formData.surname || "",
+        telephone: formData.telephone || "",
       });
-
       navigate("/home");
     } catch (err) {
       setError("An error occurred. Please try again.");

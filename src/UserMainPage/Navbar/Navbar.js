@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { doSignOut } from "../../Auth/Auth";
 import Logout from "../../LoginPage/Logout";
 import useAuth from "../../Auth";
+import UserProfile from "../../Database/Profiledb";
 // import { useUser } from "../../Auth/userContext";
 
 const Navbar = () => {
@@ -18,7 +19,7 @@ const Navbar = () => {
       }
     }, 15);
   };
-
+  const { userData } = UserProfile();
   const { user } = useAuth();
 
   const navigate = useNavigate();
@@ -48,13 +49,19 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <Logout />
-        
+        {/* <Logout /> */}
+
         {user ? (
           <div className="flex-none flex items-center space-x-4">
-            <Link to="/Profile" className="btn btn-ghost text-white text-xl">
-              SOMRAK JAIDEE
-            </Link>
+            {userData ? (
+              <Link to="/Profile" className="btn btn-ghost text-white text-xl">
+                 {userData.name}  {userData.surname}
+              </Link>
+            ) : (
+              <Link to="/Profile" className="btn btn-ghost text-white text-xl">
+                loading....
+              </Link>
+            )}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="btn btn-ghost btn-circle avatar"

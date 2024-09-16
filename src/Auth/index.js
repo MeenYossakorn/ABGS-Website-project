@@ -6,7 +6,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -20,6 +19,8 @@ const useAuth = () => {
   const updateUser = (newUser) => {
     setUser(newUser); // อัปเดตค่าผู้ใช้ทันที
   };
+
+
 
   
   return {user,updateUser};
