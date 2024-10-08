@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require('cors')
 const bodyparser = require("body-parser")
 
 
@@ -9,34 +10,37 @@ admin.initializeApp({
 });
 
 const { getStorage } = require("firebase/storage");
+
 const port = 8000
 const app = express()
 const db = admin.firestore()
 
 app.use(express.json())
+app.use(cors())
 
-let users=[]
 
 
 
 app.post("/users", async (req, res) => {
   try {
+    const {email,password} = req.body
     console.log(req.body);
-    const [day, month, year] = req.body.birthday.split("/");
-    const birthdayDate = new Date(`${year}-${month}-${day}`);
+    
+    // const [day, month, year] = req.body.birthday.split("/");
+    // const birthdayDate = new Date(`${year}-${month}-${day}`);
 
-    await db
-      .collection("users")
-      .doc("/" + req.body.uid + "/")
-      .create({
-        uid: req.body.uid,
-        fname: req.body.fname,
-        lname: req.body.lname,
-        email: req.body.email,
-        birthday: birthdayDate,
-        tel: req.body.tel,
-        role: "customer",
-      });
+    // await db
+    //   .collection("users")
+    //   .doc("/" + req.body.uid + "/")
+    //   .create({
+    //     uid: req.body.uid,
+    //     fname: req.body.fname,
+    //     lname: req.body.lname,
+    //     email: req.body.email,
+    //     birthday: birthdayDate,
+    //     tel: req.body.tel,
+    //     role: "customer",
+    //   });
 
     return res.status(200).send({ status: "success", message: "data saved" });
   } catch (error) {
@@ -74,6 +78,5 @@ app.post("/users", async (req, res) => {
 // })
 
 app.listen(port,(req,res)=>{
-
   console.log("http server run at "+ port)
 })

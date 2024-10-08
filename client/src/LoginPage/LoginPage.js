@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../Auth/Auth";
+import axios from 'axios'
 import useAuth from "../Auth";
 
 
@@ -14,14 +15,21 @@ const LoginPage = ({ onLogin }) => {
   const { updateUser } = useAuth();
 
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await doSignInWithEmailAndPassword(email, password);
-      const user = userCredential.user;
-      updateUser(user);
-      
-      navigate("/home");
+      const response = await axios.post(
+        '/users',
+        {email,password}
+      )
+      console.log('response data', response.data)
+      // const userCredential = await doSignInWithEmailAndPassword(email, password);
+      // const user = userCredential.user;
+      // updateUser(user);
+      // navigate("/home");
+
     } catch (err) {
       setError("An error occurred. Please try again.");
       console.error(err);
