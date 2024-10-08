@@ -1,55 +1,55 @@
-const express = require("express")
-const cors = require('cors')
-const bodyparser = require("body-parser")
-
+const express = require('express');
+const cors = require('cors');
+const app = express()
+const port = 8000
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+const db = admin.firestore();
 
-const { getStorage } = require("firebase/storage");
-
-const port = 8000
-const app = express()
-const db = admin.firestore()
-
+app.use(cors());
 app.use(express.json())
-app.use(cors())
 
 
 
+app.post("/users/register", async (req, res) => {
+  const { name, surname, email, telephone, password } = req.body.formData || '';
+try {
+    if(!(email && password && name&&surname&&telephone)){
+      return res.status(400).json({
+        message:'please fill in all fields.'
+      })
+    }
 
-app.post("/users", async (req, res) => {
-  try {
-    const {email,password} = req.body
-    console.log(req.body);
+    const userRecord = await admin.auth().createUser({
+      email: email,
+      password: password,
+      displayName: `${name} ${surname}`,
+    });
+
     
-    // const [day, month, year] = req.body.birthday.split("/");
-    // const birthdayDate = new Date(`${year}-${month}-${day}`);
-
-    // await db
-    //   .collection("users")
-    //   .doc("/" + req.body.uid + "/")
-    //   .create({
-    //     uid: req.body.uid,
-    //     fname: req.body.fname,
-    //     lname: req.body.lname,
-    //     email: req.body.email,
-    //     birthday: birthdayDate,
-    //     tel: req.body.tel,
-    //     role: "customer",
-    //   });
-
-    return res.status(200).send({ status: "success", message: "data saved" });
+    await db
+      .collection("users")
+      .doc(userRecord.uid)
+      .set({
+        name: name,
+        surname: surname,
+        email: email,
+        role:'user',
+        telephone: telephone,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    return res.status(200).json({ status: "success", message: "data saved" , uid : userRecord.uid});
   } catch (error) {
     console.log(error.message);
     console.log("error");
-    return res.status(500).send({ status: "failed" });
+    return res.status(500).json({ status: "failed" });
   }
 });
-
 
 // //Path ไปที่ตรงไหน
 // app.get("/users",(req,res)=>{
@@ -77,6 +77,6 @@ app.post("/users", async (req, res) => {
 //   })
 // })
 
-app.listen(port,(req,res)=>{
-  console.log("http server run at "+ port)
-})
+app.listen(port, (req, res) => {
+  console.log("http server run at " + port);
+});

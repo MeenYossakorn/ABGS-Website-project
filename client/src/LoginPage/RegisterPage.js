@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
-import { doCreateUserWithEmailAndPassword } from "../Auth/Auth";
-import { db } from "../Auth/firebase";
-import { setDoc, doc } from "firebase/firestore";
-import { auth } from "../Auth/firebase";
-import useAuth from "../Auth";
+import axios from "axios";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -14,10 +10,8 @@ const RegisterPage = () => {
     telephone: "",
     password: "",
   });
-  const { updateUser } = useAuth();
 
   const [error, setError] = useState("");
-  // const [keepSignedIn, setKeepSignedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -35,28 +29,41 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const regex = /^[0-9]+$/;
       if (isFormEmpty()) {
         throw new Error("please fill in all fields.");
+      } else if (!regex.test(formData.telephone)) {
+        throw new Error("Please enter your number");
+      } else if (formData.password.length < 6) {
+        throw new Error(
+          "The password must be a string with at least 6 characters."
+        );
       }
+      // else{
+      //   throw new Error('')
+      // }
+      
+      const response = await axios.post("/users/register", {formData});
+      if(response.status === 200){
+        console.log(response.data.uid)
+        localStorage.setItem('uid',response.data.uid);
+        navigate("/home");
+      }
+      // const user = userCredential.user;
 
-      const userCredential = await doCreateUserWithEmailAndPassword(
-        formData.email,
-        formData.password
-      );
-      const user = userCredential.user;
-      updateUser(user);
+      // updateUser(user);
       // บันทึกข้อมูลลง Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        createdAt: new Date(),
-        name: formData.name || "",
-        surname: formData.surname || "",
-        telephone: formData.telephone || "",
-      });
-      navigate("/home");
+      // await setDoc(doc(db, "users", user.uid), {
+      //   email: user.email,
+      //   createdAt: new Date(),
+      //   name: formData.name || "",
+      //   surname: formData.surname || "",
+      //   telephone: formData.telephone || "",
+      // });
+      
     } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error(err);
+      setError(err.message);
+      console.error(err.message);
     }
   };
 
