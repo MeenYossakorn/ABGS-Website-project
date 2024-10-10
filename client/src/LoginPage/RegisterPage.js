@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import useAuth from "../Auth";
+import { auth } from "../Auth/firebase";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +12,7 @@ const RegisterPage = () => {
     telephone: "",
     password: "",
   });
-
+  const { updateUserWithToken } = useAuth();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -44,22 +46,23 @@ const RegisterPage = () => {
       // }
       
       const response = await axios.post("/users/register", {formData});
-      if(response.status === 200){
-        console.log(response.data.uid)
-        localStorage.setItem('uid',response.data.uid);
+      if(response.data.status === "success"){
+        // console.log(response.data.uid)
+        // console.log(response.data.token)
+        // console.log(response.data.email)
+
+        await updateUserWithToken(response.data.token);
+        // updateUser({
+        //   uid: response.data.uid,
+        //   token: response.data.token,
+        //   email: formData.email,
+        // });
         navigate("/home");
       }
       // const user = userCredential.user;
 
       // updateUser(user);
-      // บันทึกข้อมูลลง Firestore
-      // await setDoc(doc(db, "users", user.uid), {
-      //   email: user.email,
-      //   createdAt: new Date(),
-      //   name: formData.name || "",
-      //   surname: formData.surname || "",
-      //   telephone: formData.telephone || "",
-      // });
+      
       
     } catch (err) {
       setError(err.message);

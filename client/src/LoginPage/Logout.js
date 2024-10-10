@@ -12,7 +12,6 @@ const Logout = () => {
   const handleLogout = () => {
     doSignOut().then(() => {
       updateUser(null);
-     
       navigate("/home");
     }).catch((error) => {
       console.error("Error logging out:", error);

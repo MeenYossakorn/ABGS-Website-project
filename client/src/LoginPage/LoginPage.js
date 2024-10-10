@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../Auth/Auth";
-import axios from 'axios'
+import axios from "axios";
 import useAuth from "../Auth";
-
 
 const LoginPage = ({ onLogin }) => {
   const [email, setUsername] = useState("");
@@ -12,27 +11,29 @@ const LoginPage = ({ onLogin }) => {
   // const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { updateUser } = useAuth();
-
-
-
+  const { updateUserWithToken } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        '/users',
-        {email,password}
-      )
-      console.log('response data', response.data)
-      // const userCredential = await doSignInWithEmailAndPassword(email, password);
-      // const user = userCredential.user;
-      // updateUser(user);
-      // navigate("/home");
+      if (email && password === "") {
+        throw new Error("please fill in all fields.");
+      }
+      const response = await axios.post("/users/login", { email, password });
 
+      if (response.data.status === "success") {
+        await updateUserWithToken(response.data.token);
+
+        // console.log("response data", response.data);
+
+        // const userCredential = await doSignInWithEmailAndPassword(email, password);
+        // const user = userCredential.user;
+        // updateUser(user);
+        navigate("/home");
+      }
     } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error(err);
+      setError(err.message);
+      console.error(err.message);
     }
   };
 

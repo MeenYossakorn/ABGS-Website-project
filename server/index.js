@@ -1,81 +1,136 @@
-const express = require('express');
-const cors = require('cors');
-const app = express()
-const port = 8000
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const app = express();
+const port = 8000;
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 const db = admin.firestore();
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
+app.use(bodyParser.json());
 
+const checkAuth = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // รับ token จาก headers
 
-
-app.post("/users/register", async (req, res) => {
-  const { name, surname, email, telephone, password } = req.body.formData || '';
-try {
-    if(!(email && password && name&&surname&&telephone)){
-      return res.status(400).json({
-        message:'please fill in all fields.'
-      })
-    }
-
-    const userRecord = await admin.auth().createUser({
-      email: email,
-      password: password,
-      displayName: `${name} ${surname}`,
-    });
-
-    
-    await db
-      .collection("users")
-      .doc(userRecord.uid)
-      .set({
-        name: name,
-        surname: surname,
-        email: email,
-        role:'user',
-        telephone: telephone,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
-    return res.status(200).json({ status: "success", message: "data saved" , uid : userRecord.uid});
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token); // ตรวจสอบ token และดึง UID
+    req.uid = decodedToken.uid; // เก็บ UID ของผู้ใช้ที่ล็อกอินอยู่
+    next(); // ทำงานต่อไป
   } catch (error) {
-    console.log(error.message);
-    console.log("error");
-    return res.status(500).json({ status: "failed" });
+    res
+      .status(401)
+      .json({ message: "Unauthorized", errmessage: error.message });
+  }
+};
+
+//ดึงข้อมูล User มาเเสดง
+app.get("/users/profile", checkAuth, async (req, res) => {
+  try {
+    // ดึงข้อมูลผู้ใช้จาก Firestore โดยใช้ UID ที่ได้จาก token
+    const userRef = db.collection("users").doc(req.uid);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // ดึงข้อมูลผู้ใช้จาก Firestore
+    const userData = doc.data();
+    // ส่งข้อมูลผู้ใช้กลับไปที่ frontend
+    res.status(200).json(userData);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user data", error: error.message });
   }
 });
 
-// //Path ไปที่ตรงไหน
-// app.get("/users",(req,res)=>{
-//  let user = {
-//   firstname: "test",
-//   lastname:"eiei",
-//   age:"14"
-//  }
-//   res.json(user)
-// })
+//Register new user
+app.post("/users/register", async (req, res) => {
+  const { name, surname, email, telephone, password } = req.body.formData || "";
+  try {
+    if (!(name && surname && email && telephone && password)) {
+      return res.status(400).json({
+        message: "please fill in all fields.",
+      });
+    }
 
-// //path = GET /users
-// app.get("/users",(req,res)=>{
-//   console.log("test")
-//   res.json(users)
-// })
+    // ตรวจสอบว่าอีเมลมีอยู่แล้วหรือไม่
+    try {
+      const existingUser = await admin.auth().getUserByEmail(email);
+      // ถ้ามีผู้ใช้อีเมลนี้อยู่แล้ว
+      return res.status(400).json({
+        status: "failed",
+        message: "Email already exists.",
+      });
+    } catch (error) {
+      if (error.code === "auth/user-not-found") {
+        // ถ้าไม่มีผู้ใช้อีเมลนี้ก็สร้างใหม่
+        const userRecord = await admin.auth().createUser({
+          email: email,
+          password: password,
+          displayName: `${name} ${surname}`,
+        });
 
-// // path = POST /user
-// app.post("/user",(req,res)=>{
-//   let user = req.body
-//   users.push(user)
-//   res.json({
-//     message : "add ok",
-//     user:user
-//   })
-// })
+        // บันทึกข้อมูลลงใน Firestore
+        await db.collection("users").doc(userRecord.uid).set({
+          name: name,
+          surname: surname,
+          email: email,
+          role: "user",
+          telephone: telephone,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        // สร้าง token และส่งกลับไปยัง frontend
+        const token = await admin.auth().createCustomToken(userRecord.uid);
+        return res.status(200).json({
+          status: "success",
+          message: "Data saved",
+          uid: userRecord.uid,
+          token: token,
+          email: userRecord.email,
+        });
+      } else {
+        throw error; // หากเป็น error อื่นๆ ให้ส่งกลับไปยัง catch block
+      }
+    }
+  } catch (error) {
+    console.log(error.message);
+    console.log("error");
+    return res.status(500).json({ status: "failed", error: error.message });
+  }
+});
+
+//Login user
+app.post("/users/login", async (req, res) => {
+  const { email, password } = req.body || "";
+  try {
+    if (!(email && password)) {
+      return res.status(400).json({
+        message: "please fill in all fields.",
+      });
+    }
+    const userRecord = await admin.auth().getUserByEmail(email);
+    // สร้าง Custom Token
+    const token = await admin.auth().createCustomToken(userRecord.uid);
+    return res.status(200).json({
+      status: "success",
+      uid: userRecord.uid,
+      email: userRecord.email,
+      token: token,
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ status: "failed" });
+  }
+});
 
 app.listen(port, (req, res) => {
   console.log("http server run at " + port);

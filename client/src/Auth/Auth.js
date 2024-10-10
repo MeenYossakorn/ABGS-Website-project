@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  signInWithCustomToken,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -12,12 +13,16 @@ import { Navigate } from "react-router-dom";
 
 
 
-export const doCreateUserWithEmailAndPassword = async (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password);
-};
+// export const doCreateUserWithEmailAndPassword = async (email, password) => {
+//   return createUserWithEmailAndPassword(auth, email, password);
+// };
 
-export const doSignInWithEmailAndPassword = async (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
+// export const doSignInWithEmailAndPassword = async (email, password) => {
+//   return signInWithEmailAndPassword(auth, email, password);
+// };
+
+export const doSignInWithCustomToken = async (auth, token) => {
+  return signInWithCustomToken(auth,token);
 };
 
 export const doSignInWithGoogle = async () => {
