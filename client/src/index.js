@@ -23,7 +23,9 @@ import VehicleRegistrationInformation from "./ManagerMainPage/VehicleRegistratio
 import Home from "./Home";
 import Logout from "./LoginPage/Logout";
 import PrivateRoute from "./Auth/PrivateRoute";
+import CheckRole from "./Auth/CheckRole";
 
+const a = false;
 const router = createBrowserRouter([
   {
     path: "/",
@@ -81,9 +83,15 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  a ? (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  ) : (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  )
 );
 
 // If you want to start measuring performance in your app, pass a function

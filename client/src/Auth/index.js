@@ -5,6 +5,7 @@ import { doSignInWithCustomToken } from './Auth';
 
 const useAuth = () => {
   const [user, setUser] = useState(null); // เก็บข้อมูลผู้ใช้
+  const [token, setToken] = useState(null); // เก็บข้อมูลtoken
   const [loading, setLoading] = useState(true); // แสดงสถานะการโหลดข้อมูล
 
   useEffect(() => {
@@ -22,20 +23,27 @@ const useAuth = () => {
       // ทำการล็อกอินด้วย custom token
       const result = await doSignInWithCustomToken(auth, token);
       setUser(result.user); // อัปเดตค่าผู้ใช้ทันทีหลังจากล็อกอินสำเร็จ
+      setToken(result.token);
     } catch (error) {
       console.error('Error logging in with custom token:', error);
     }
   };
 
-  const updateUser = (newUser) => {
+  const updateUser = (newUser) => { 
     setUser(newUser); // ฟังก์ชันนี้ยังคงใช้เพื่ออัปเดตข้อมูลผู้ใช้ทั่วไปได้
   };
+  const updateToken = (newToken) =>{
+    setToken(newToken);
+  }
 
   return {
     user,           // ข้อมูลผู้ใช้ที่ล็อกอิน
+    token,
     loading,        // สถานะการโหลดข้อมูล
     updateUser,     // ฟังก์ชันอัปเดตผู้ใช้ทั่วไป
+    updateToken,
     updateUserWithToken, // ฟังก์ชันอัปเดตผู้ใช้ด้วย token
+
   };
 };
 

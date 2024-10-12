@@ -6,10 +6,11 @@ const PrivateRoute = ({ element,a}) => {
 
   const {user} = useAuth(); // ใช้ custom hook เพื่อเช็คสถานะผู้ใช้
   const [valueA,setValueA] = useState(null)
+  
   useEffect(() => {
     setValueA(a);
   }, [a]);
-  
+ 
   if (user && valueA === true) {
     return <Navigate to="/home" replace />;
   }else if(user === null && valueA ===false){

@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../Auth/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth} from "../Auth/firebase";
 import axios from "axios";
+import useAuth from "../Auth";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {user,token,updateToken} = useAuth()
 
   useEffect(() => {
+    
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
-          const token = await user.getIdToken(); // รับ token ของผู้ใช้
-          
+          const token = await user.getIdToken();
+          updateToken(token)
+          // console.log(token)
           const response = await axios.get("/users/profile", {
             headers: {
               Authorization: `Bearer ${token}`, // ส่ง token ใน headers
             },
           });
-
-          // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์และตั้งค่าข้อมูลผู้ใช้
+          
           setUserData(response.data);
         } catch (error) {
           console.error("Error fetching user data from server: ", error);

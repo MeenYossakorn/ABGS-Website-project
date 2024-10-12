@@ -32,3 +32,6 @@ yarn-error.log*
 /client/node_modules/.cache
 /client/node_modules/.cache
 *.pack
+server/serviceAccountKey.json
+client/node_modules/.cache/default-development/index.pack.old
+*.pack

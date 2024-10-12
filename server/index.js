@@ -14,10 +14,10 @@ const db = admin.firestore();
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 const checkAuth = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1]; // รับ token จาก headers
+  const token = req.headers.authorization?.split(" ")[1];
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token); // ตรวจสอบ token และดึง UID
@@ -26,7 +26,7 @@ const checkAuth = async (req, res, next) => {
   } catch (error) {
     res
       .status(401)
-      .json({ message: "Unauthorized", errmessage: error.message });
+      .json({ message: "Unauthorized", errorMessage: error.message });
   }
 };
 
@@ -80,6 +80,7 @@ app.post("/users/register", async (req, res) => {
 
         // บันทึกข้อมูลลงใน Firestore
         await db.collection("users").doc(userRecord.uid).set({
+          uid: userRecord.uid,
           name: name,
           surname: surname,
           email: email,
@@ -128,8 +129,114 @@ app.post("/users/login", async (req, res) => {
     });
   } catch (err) {
     console.log(err.message);
-    return res.status(500).json({ status: "failed" });
+    return res.status(500).json({ status: "failed", error: error.message });
   }
+});
+
+app.post("/users/signInCar", async (req, res) => {
+  const {
+    name,
+    surname,
+    province,
+    brand,
+    color,
+    licensePlate,
+    driverLicense,
+    role,
+    userId,
+  } = req.body.formData || "";
+
+ 
+
+  try {
+    // ตรวจสอบข้อมูลที่จำเป็นว่าครบถ้วนหรือไม่
+    if (
+      !(
+        name &&
+        surname &&
+        province &&
+        brand &&
+        color &&
+        licensePlate &&
+        driverLicense &&
+        role
+      )
+    ) {
+      return res.status(400).json({
+        message: "Please fill in all fields.",
+      });
+    }
+
+    // const userCarData = {
+    //   uid: userID,
+    //   name: name,
+    //   surname: surname,
+    //   province: province,
+    //   brand: brand,
+    //   color: color,
+    //   licensePlate: licensePlate,
+    //   driverLicense: driverLicense,
+    //   role: role,
+    //   // createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    // };
+
+    // เพิ่มข้อมูลลง Firestore โดยใช้ uid เป็น document ID // merge: true เพื่อไม่ลบข้อมูลที่มีอยู่แล้ว
+    await db.collection("carsRequest").doc().set(
+      {
+        
+        name: name,
+        surname: surname,
+        province: province,
+        brand: brand,
+        color: color,
+        licensePlate: licensePlate,
+        driverLicense: driverLicense,
+        role: role,
+        userId:userId,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    // ส่งสถานะกลับหลังจากบันทึกข้อมูลสำเร็จ
+    return res.status(200).json({
+      status: "success",
+      name: name,
+      surname: surname,
+    });
+  } catch (error) {
+    console.error("Error saving user car data: ", error);
+    return res.status(500).json({
+      status: "failed",
+      error: error.message,
+    });
+  }
+});
+
+app.get("/users/checkRole", async (req,res)=>{
+  try {
+    console.log(req.body)
+    const {userId} = req.body || ""
+
+    const userRef = db.collection("users").doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    const userData = doc.data();
+    const userRole = userData.role;
+    
+    res.status(200).json({status: "success",userRole:userRole} );
+  } catch (error) {
+     console.log(error)
+    res
+      .status(500)
+      .json({ message: "Error fetching user data", error: error.message });
+     
+  }
+
 });
 
 app.listen(port, (req, res) => {

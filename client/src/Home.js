@@ -7,17 +7,19 @@ import useAuth from "./Auth/index.js";
 
 export default function Home() {
   const navigate = useNavigate();
-const {user} = useAuth();
-
+  const { user } = useAuth();
   return (
     <>
       <div>
-      {user ? (
-        <p>Email: {user.email}</p>
-      ) : (
-        <p>No user is logged in</p>
-      )}
-    </div>
+        {user ? (
+          <>
+            <p>Email: {user.email}</p>
+            <p>User: {user.uid}</p>
+          </>
+        ) : (
+          <p>No user is logged in</p>
+        )}
+      </div>
       <Navbar />
       <Content />
       <Footer />

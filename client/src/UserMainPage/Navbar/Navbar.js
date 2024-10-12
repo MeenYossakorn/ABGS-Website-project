@@ -20,7 +20,7 @@ const Navbar = () => {
     }, 15);
   };
   const { userData } = UserProfile();
-  const { user } = useAuth();
+  const { token,user,updateUser,updateToken } = useAuth();
 
   const navigate = useNavigate();
 
@@ -28,7 +28,10 @@ const Navbar = () => {
     doSignOut() // ฟังก์ชันสำหรับ sign out ผู้ใช้
       .then(() => {
         setIsOpen(false); // ปิดเมนูหรือ modal ที่เปิดอยู่ (ถ้ามี)
-        navigate("/loginpage"); // นำทางไปยังหน้า login
+       
+        updateUser(null)
+        updateToken(null)
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error logging out:", error);
@@ -144,7 +147,7 @@ const Navbar = () => {
               <div className="border-b"></div>
               <li>
                 <Link
-                  to="#"
+                  to="/"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
                   onClick={handleLogout}
                 >
