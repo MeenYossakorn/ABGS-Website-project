@@ -21,11 +21,12 @@ import UserRequestPage from "./ManagerMainPage/UserRequestPage";
 import VehicleInformation from "./ManagerMainPage/VehicleInformationPage";
 import VehicleRegistrationInformation from "./ManagerMainPage/VehicleRegistrationInformationPage";
 import Home from "./Home";
-import Logout from "./LoginPage/Logout";
+// import Logout from "./LoginPage/Logout";
 import PrivateRoute from "./Auth/PrivateRoute";
 import CheckRole from "./Auth/CheckRole";
+import LogoutOnClose from "./LoginPage/Logoutonclose";
 
-const a = false;
+// const a = false;
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,23 +76,24 @@ const router = createBrowserRouter([
     path: "/home",
     element: <Home />,
   },
-  {
-    path: "/Logout",
-    element: <Logout />,
-  },
+  // {
+  //   path: "/Logout",
+  //   element: <Logout />,
+  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  a ? (
+  // a ? (
     <React.StrictMode>
+      <LogoutOnClose/>
       <RouterProvider router={router} />
     </React.StrictMode>
-  ) : (
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  )
+  // ) : (
+  //   <React.StrictMode>
+  //     <RouterProvider router={router} />
+  //   </React.StrictMode>
+  // )
 );
 
 // If you want to start measuring performance in your app, pass a function

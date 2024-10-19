@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { doSignOut } from "../../Auth/Auth";
-import Logout from "../../LoginPage/Logout";
+
 import useAuth from "../../Auth";
 import UserProfile from "../../Database/Profiledb";
 // import { useUser } from "../../Auth/userContext";
@@ -21,14 +21,13 @@ const Navbar = () => {
   };
   const { userData } = UserProfile();
   const { token,user,updateUser,updateToken } = useAuth();
-
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
     doSignOut() // ฟังก์ชันสำหรับ sign out ผู้ใช้
       .then(() => {
         setIsOpen(false); // ปิดเมนูหรือ modal ที่เปิดอยู่ (ถ้ามี)
-       
         updateUser(null)
         updateToken(null)
         navigate("/");
