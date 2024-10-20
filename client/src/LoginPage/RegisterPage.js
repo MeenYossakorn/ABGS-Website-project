@@ -44,9 +44,9 @@ const RegisterPage = () => {
       // else{
       //   throw new Error('')
       // }
-      
-      const response = await axios.post("/users/register", {formData});
-      if(response.data.status === "success"){
+
+      const response = await axios.post("/users/register", { formData });
+      if (response.data.status === "success") {
         // console.log(response.data.uid)
         // console.log(response.data.token)
         // console.log(response.data.email)
@@ -62,8 +62,6 @@ const RegisterPage = () => {
       // const user = userCredential.user;
 
       // updateUser(user);
-      
-      
     } catch (err) {
       setError(err.message);
       console.error(err.message);
@@ -143,16 +141,25 @@ const RegisterPage = () => {
                   SIGN UP
                 </button>
               </div>
-              <div className="mt-6 text-center font-semibold text-sm">
-                Already have an account? {"   "}
-                <Link
-                  to={"/loginpage"}
-                  className="font-semibold text-blue ml-1 underline"
-                >
-                  Continue
-                </Link>
-              </div>
             </form>
+            <p className="mt-5 text-center font-semibold text-sm">
+              ALREADY HAVE AN ACCOUNT ? {"   "}
+              <Link
+                to={"/loginpage"}
+                className="font-semibold text-blue ml-1 underline"
+              >
+                CONTINUE
+              </Link>
+            </p>
+            <p className="mt-2 text-center font-semibold text-sm">
+              BACK TO
+              <Link
+                to="/home"
+                className="font-semibold text-blue ml-1 underline"
+              >
+                HOME
+              </Link>
+            </p>
           </div>
         </div>
       </div>

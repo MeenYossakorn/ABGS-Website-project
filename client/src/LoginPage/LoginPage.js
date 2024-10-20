@@ -103,13 +103,22 @@ const LoginPage = ({ onLogin }) => {
               </button>
             </div>
           </form>
-          <p className="mt-6 text-center font-semibold text-sm">
+          <p className="mt-5 text-center font-semibold text-sm">
             DON'T HAVE AN ACCOUNT
             <Link
               to="/registerpage"
               className="font-semibold text-blue ml-1 underline"
             >
               SIGN UP
+            </Link>
+          </p>
+          <p className="mt-2 text-center font-semibold text-sm">
+            BACK TO 
+            <Link
+              to="/home"
+              className="font-semibold text-blue ml-1 underline"
+            >
+              HOME
             </Link>
           </p>
         </div>
