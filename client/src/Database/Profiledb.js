@@ -4,7 +4,7 @@ import axios from "axios";
 import useAuth from "../Auth";
 
 const UserProfile = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const {user,token,updateToken} = useAuth()
 
@@ -45,7 +45,8 @@ const UserProfile = () => {
   if (!userData) {
     return <p>No user data available.</p>;
   }
-
+//  console.log(userData)
+//  console.log("1")
   return { userData };
 };
 

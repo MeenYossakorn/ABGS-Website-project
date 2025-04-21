@@ -1,16 +1,16 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const app = express();
 const port = 8000;
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 const db = admin.firestore();
+
 
 app.use(cors());
 app.use(express.json());
@@ -48,6 +48,28 @@ app.get("/users/profile", checkAuth, async (req, res) => {
     res
       .status(500)
       .json({ message: "Error fetching user data", error: error.message });
+  }
+});
+app.get("/users/profile/mycar", checkAuth, async (req, res) => {
+  try {
+    const MyCarRef = db.collection("carsRequest");
+    const snapshot = await MyCarRef.where("userId","==",req.uid).get();
+  
+
+    if (snapshot.empty) {
+      return res.status(404).json({ message: "car not found" });
+    }
+
+    const MycarList = [];
+    snapshot.forEach((doc) =>{
+      MycarList.push(doc.data());
+    })
+    // console.log(MycarList)
+
+    // res.status(200).json({data:MycarList,Amount:MycarList.length});
+    res.status(200).json(MycarList);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user data", error: error.message });
   }
 });
 
@@ -118,6 +140,7 @@ app.post("/users/login", async (req, res) => {
         message: "please fill in all fields.",
       });
     }
+    
     const userRecord = await admin.auth().getUserByEmail(email);
     // สร้าง Custom Token
     const token = await admin.auth().createCustomToken(userRecord.uid);
@@ -145,9 +168,7 @@ app.post("/users/signInCar", async (req, res) => {
     role,
     userId,
   } = req.body.formData || "";
-
- 
-
+  
   try {
     // ตรวจสอบข้อมูลที่จำเป็นว่าครบถ้วนหรือไม่
     if (
@@ -167,19 +188,6 @@ app.post("/users/signInCar", async (req, res) => {
       });
     }
 
-    // const userCarData = {
-    //   uid: userID,
-    //   name: name,
-    //   surname: surname,
-    //   province: province,
-    //   brand: brand,
-    //   color: color,
-    //   licensePlate: licensePlate,
-    //   driverLicense: driverLicense,
-    //   role: role,
-    //   // createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    // };
-
     // เพิ่มข้อมูลลง Firestore โดยใช้ uid เป็น document ID // merge: true เพื่อไม่ลบข้อมูลที่มีอยู่แล้ว
     await db.collection("carsRequest").doc().set(
       {
@@ -193,6 +201,8 @@ app.post("/users/signInCar", async (req, res) => {
         driverLicense: driverLicense,
         role: role,
         userId:userId,
+        status:0,
+        dateExpire:null,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true }
@@ -217,7 +227,6 @@ app.get("/users/checkRole", async (req,res)=>{
   try {
     console.log(req.body)
     const {userId} = req.body || ""
-
     const userRef = db.collection("users").doc(userId);
     const doc = await userRef.get();
 
@@ -236,7 +245,6 @@ app.get("/users/checkRole", async (req,res)=>{
       .json({ message: "Error fetching user data", error: error.message });
      
   }
-
 });
 
 app.listen(port, (req, res) => {
