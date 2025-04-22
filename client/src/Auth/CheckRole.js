@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import useAuth from "./index"; // นำเข้า useAuth hook เพื่อตรวจสอบสถานะผู้ใช้
 import axios from "axios";
+import config from "../config/config.json"
 
 const CheckRole = ({ a }) => {
   const { user } = useAuth(); // ใช้ custom hook เพื่อเช็คสถานะผู้ใช้
@@ -12,7 +13,7 @@ const CheckRole = ({ a }) => {
     const fetchUserRole = async () => {
       try {
         if (user) {
-          const response = await axios.get("/users/checkRole", {
+          const response = await axios.get(`${config.apiBaseUrl}/users/checkRole`, {
             params: { userId: user.uid }, // ส่ง userId เป็น query parameter
           });
           setRole(response.data.role); // ตั้งค่า Role ที่ได้รับจาก API

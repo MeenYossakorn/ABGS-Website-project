@@ -133,8 +133,8 @@ const Navbar = () => {
                   REGISTER
                 </Link>
               </li>
-              <div className="border-b"></div>
-              <li>
+              {/* <div className="border-b"></div> */}
+              {/* <li>
                 <Link
                   to="/Report"
                   className="block py-2 px-4 hover:bg-gray-100 text-center"
@@ -142,7 +142,7 @@ const Navbar = () => {
                 >
                   REPORT
                 </Link>
-              </li>
+              </li> */}
               <div className="border-b"></div>
               <li>
                 <Link

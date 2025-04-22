@@ -4,6 +4,7 @@ import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
 import axios from "axios";
 import useAuth from "../Auth";
+import config from "../config/config.json"
 
 const RegisterCar = () => {
   const {user}= useAuth()
@@ -55,7 +56,7 @@ const RegisterCar = () => {
       console.log(formData)
       console.log(user.uid)
       
-      const response = await axios.post("/users/signInCar" , {formData});
+      const response = await axios.post(`${config.apiBaseUrl}/users/signInCar` , {formData});
       if(response.data.status === 'success'){
         navigate("/")
       }

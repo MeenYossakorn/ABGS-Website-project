@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { auth} from "../Auth/firebase";
 import axios from "axios";
 import useAuth from "../Auth";
+import config from "../config/config.json"
 
 const UserProfile = () => {
   const [userData, setUserData] = useState([]);
@@ -16,7 +17,7 @@ const UserProfile = () => {
           const token = await user.getIdToken();
           updateToken(token)
           // console.log(token)
-          const response = await axios.get("/users/profile", {
+          const response = await axios.get(`${config.apiBaseUrl}/users/profile`, {
             headers: {
               Authorization: `Bearer ${token}`, // ส่ง token ใน headers
             },

@@ -3,6 +3,7 @@ import { Navigate, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useAuth from "../Auth";
 import { auth } from "../Auth/firebase";
+import config from "../config/config.json";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,8 @@ const RegisterPage = () => {
       //   throw new Error('')
       // }
 
-      const response = await axios.post("/users/register", { formData });
+      // const response = await axios.post("/users/register", { formData });
+      const response = await axios.post(`${config.apiBaseUrl}/users/register`, { formData });
       if (response.data.status === "success") {
         // console.log(response.data.uid)
         // console.log(response.data.token)

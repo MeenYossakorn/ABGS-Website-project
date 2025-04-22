@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../Auth/Auth";
 import axios from "axios";
 import useAuth from "../Auth";
+import config from "../config/config.json"
 
 const LoginPage = ({ onLogin }) => {
   const [email, setUsername] = useState("");
@@ -19,8 +20,8 @@ const LoginPage = ({ onLogin }) => {
       if (email && password === "") {
         throw new Error("please fill in all fields.");
       }
-      const response = await axios.post("/users/login", { email, password });
-
+      // const response = await axios.post("/users/login", { email, password });
+      const response = await axios.post(`${config.apiBaseUrl}/users/login`, { email, password });
       if (response.data.status === "success") {
         await updateUserWithToken(response.data.token);
 
