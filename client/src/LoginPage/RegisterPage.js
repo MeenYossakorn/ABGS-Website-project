@@ -112,6 +112,11 @@ const RegisterPage = () => {
                     placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
                     value={value}
                     onChange={handleInputChange}
+                    maxLength={
+                      key === "telephone"
+                      ? 10
+                      :""
+                    }
                   />
                 </div>
               ))}

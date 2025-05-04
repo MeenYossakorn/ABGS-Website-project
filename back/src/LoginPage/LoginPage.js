@@ -20,16 +20,10 @@ const LoginPage = ({ onLogin }) => {
       if (email && password === "") {
         throw new Error("please fill in all fields.");
       }
-      // const response = await axios.post("/users/login", { email, password });
-      const response = await axios.post(`${config.apiBaseUrl}/users/login`, { email, password });
+      const response = await axios.post(`${config.apiBaseUrl}/admin/login`, { email, password });
       if (response.data.status === "success") {
         await updateUserWithToken(response.data.token);
 
-        // console.log("response data", response.data);
-
-        // const userCredential = await doSignInWithEmailAndPassword(email, password);
-        // const user = userCredential.user;
-        // updateUser(user);
         navigate("/home");
       }
     } catch (err) {
