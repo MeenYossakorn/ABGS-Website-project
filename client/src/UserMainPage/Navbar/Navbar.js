@@ -30,6 +30,7 @@ const Navbar = () => {
         setIsOpen(false); // ปิดเมนูหรือ modal ที่เปิดอยู่ (ถ้ามี)
         updateUser(null)
         updateToken(null)
+        localStorage.removeItem('logoutTime'); 
         navigate("/");
       })
       .catch((error) => {

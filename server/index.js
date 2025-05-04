@@ -1,8 +1,12 @@
+const CheckverifyPassword = require("./admin/checkpassword")
+
 const express = require("express");
 const cors = require("cors");
 // const bodyParser = require("body-parser");
 const app = express();
 const port = 8000;
+
+
 
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
@@ -10,7 +14,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 const db = admin.firestore();
-
 
 app.use(cors());
 app.use(express.json());
@@ -53,23 +56,24 @@ app.get("/users/profile", checkAuth, async (req, res) => {
 app.get("/users/profile/mycar", checkAuth, async (req, res) => {
   try {
     const MyCarRef = db.collection("carsRequest");
-    const snapshot = await MyCarRef.where("userId","==",req.uid).get();
-  
+    const snapshot = await MyCarRef.where("userId", "==", req.uid).get();
 
     if (snapshot.empty) {
       return res.status(404).json({ message: "car not found" });
     }
 
     const MycarList = [];
-    snapshot.forEach((doc) =>{
+    snapshot.forEach((doc) => {
       MycarList.push(doc.data());
-    })
+    });
     // console.log(MycarList)
 
     // res.status(200).json({data:MycarList,Amount:MycarList.length});
     res.status(200).json(MycarList);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user data", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching user data", error: error.message });
   }
 });
 
@@ -107,6 +111,7 @@ app.post("/users/register", async (req, res) => {
           surname: surname,
           email: email,
           role: "user",
+          password: password,
           telephone: telephone,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
@@ -140,18 +145,69 @@ app.post("/users/login", async (req, res) => {
         message: "please fill in all fields.",
       });
     }
-    
-    const userRecord = await admin.auth().getUserByEmail(email);
-    // สร้าง Custom Token
-    const token = await admin.auth().createCustomToken(userRecord.uid);
-    return res.status(200).json({
-      status: "success",
-      uid: userRecord.uid,
-      email: userRecord.email,
-      token: token,
-    });
-  } catch (err) {
-    console.log(err.message);
+
+    const check = await CheckverifyPassword(email, password);
+  
+    console.log("re " + check)
+
+    if (check) {
+      const userRecord = await admin.auth().getUserByEmail(email);
+      const token = await admin.auth().createCustomToken(userRecord.uid);
+      return res.status(200).json({
+        status: "success",
+        uid: userRecord.uid,
+        email: userRecord.email,
+        token: token,
+      });
+    } else {
+      return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ status: "failed", error: error.message });
+  }
+});
+
+//admin
+app.post("/admin/login", async (req, res) => {
+  const { email, password } = req.body || "";
+  try {
+    if (!(email && password)) {
+      return res.status(400).json({
+        message: "please fill in all fields.",
+      });
+    }
+
+    const check = await CheckverifyPassword(email, password);
+  
+    console.log("re " + check)
+
+    if (check) {
+      const userRecord = await admin.auth().getUserByEmail(email);
+      const token = await admin.auth().createCustomToken(userRecord.uid);
+
+      const userRef = db.collection("users").doc(userRecord.uid);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const userData = doc.data();
+      if(userData.role == "admin"){
+        return res.status(200).json({
+          status: "success",
+          uid: userRecord.uid,
+          email: userRecord.email,
+          token: token,
+        });
+      }else{
+        return res.status(401).json({ message: "ีไม่สามารถเข้าใช้งานได้" });
+
+      }
+    } else {
+      return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
+    }
+  } catch (error) {
+    console.log(error.message);
     return res.status(500).json({ status: "failed", error: error.message });
   }
 });
@@ -168,7 +224,7 @@ app.post("/users/signInCar", async (req, res) => {
     role,
     userId,
   } = req.body.formData || "";
-  
+
   try {
     // ตรวจสอบข้อมูลที่จำเป็นว่าครบถ้วนหรือไม่
     if (
@@ -191,7 +247,6 @@ app.post("/users/signInCar", async (req, res) => {
     // เพิ่มข้อมูลลง Firestore โดยใช้ uid เป็น document ID // merge: true เพื่อไม่ลบข้อมูลที่มีอยู่แล้ว
     await db.collection("carsRequest").doc().set(
       {
-        
         name: name,
         surname: surname,
         province: province,
@@ -200,9 +255,9 @@ app.post("/users/signInCar", async (req, res) => {
         licensePlate: licensePlate,
         driverLicense: driverLicense,
         role: role,
-        userId:userId,
-        status:0,
-        dateExpire:null,
+        userId: userId,
+        status: 0,
+        dateExpire: null,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true }
@@ -223,27 +278,37 @@ app.post("/users/signInCar", async (req, res) => {
   }
 });
 
-app.get("/users/checkRole", async (req,res)=>{
+app.post("/test", async (req, res) => {
   try {
-    console.log(req.body)
-    const {userId} = req.body || ""
+    return res.status(200).json({
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ status: "failed", error: error.message });
+  }
+});
+
+app.get("/users/checkRole", async (req, res) => {
+  try {
+    console.log(req.body);
+    const { userId } = req.body || "";
     const userRef = db.collection("users").doc(userId);
     const doc = await userRef.get();
 
     if (!doc.exists) {
       return res.status(404).json({ message: "User not found" });
     }
-    
+
     const userData = doc.data();
     const userRole = userData.role;
-    
-    res.status(200).json({status: "success",userRole:userRole} );
+
+    res.status(200).json({ status: "success", userRole: userRole });
   } catch (error) {
-     console.log(error)
+    console.log(error);
     res
       .status(500)
       .json({ message: "Error fetching user data", error: error.message });
-     
   }
 });
 
