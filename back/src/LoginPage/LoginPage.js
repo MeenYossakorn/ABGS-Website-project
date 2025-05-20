@@ -34,17 +34,7 @@ const LoginPage = ({ onLogin }) => {
 
   return (
     <div className="flex h-screen bg-gradient-to-r from-blue to-white w-full">
-      {/* Left side */}
-      <div className="w-3/5 flex items-center justify-center text-white p-12">
-        <div>
-          <h1 className="text-4xl text-center font-bold mb-4">WELCOME</h1>
-          <p className="text-lg font-semibold text-center">
-            " This is a platform for accessing the automatic barrier gate
-            system. Please log in or register to access the automatic barrier
-            gate. "
-          </p>
-        </div>
-      </div>
+      
       {/* Right side */}
       <div className="w-2/5 bg-white flex items-center justify-center rounded-2xl">
         <div className="w-5/6 max-w-md">
