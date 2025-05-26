@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { doSignInWithEmailAndPassword } from "../Auth/Auth";
 import axios from "axios";
 import useAuth from "../Auth";
-import config from "../config/config.json"
+import config from "../config/config.json";
 
 const LoginPage = ({ onLogin }) => {
   const [email, setUsername] = useState("");
@@ -17,96 +17,79 @@ const LoginPage = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (email && password === "") {
-        throw new Error("please fill in all fields.");
+      if (!email || !password) {
+        console.log("Missing email or password");
+        setError("Please fill in all fields.");
+        throw new Error("Please fill in all fields.");
       }
-      const response = await axios.post(`${config.apiBaseUrl}/admin/login`, { email, password });
+      const response = await axios.post(`${config.apiBaseUrl}/admin/login`, {
+        email,
+        password,
+      });
+      console.log(response.data.message)
+      setError(response.data.message)
       if (response.data.status === "success") {
         await updateUserWithToken(response.data.token);
 
         navigate("/home");
       }
+
     } catch (err) {
-      setError(err.message);
       console.error(err.message);
     }
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-r from-blue to-white w-full">
-      
-      {/* Right side */}
-      <div className="w-2/5 bg-white flex items-center justify-center rounded-2xl">
-        <div className="w-5/6 max-w-md">
-          <h2 className="text-2xl font-bold mb-3 text-center">LOGIN ACCOUNT</h2>
-          <p className="mb-4">
-            Please log in to gain access. If you don't have an account yet you
-            can register below
-          </p>
-          {error && <p className="text-red mb-4">{error}</p>}
-          <form onSubmit={handleSubmit}>
-            <div className="block text-gray-700 text-xs font-semibold mb-2">
+    <div className="flex items-center justify-center h-screen w-full bg-gradient-to-r from-blue-400 via-white to-white">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+        <h2 className="text-3xl font-bold mb-4 text-center text-blue-600">
+          LOGIN ACCOUNT
+        </h2>
+        <p className="mb-6 text-sm text-center text-gray-600">
+          Please log in to gain access. <br />
+          If you don't have an account yet, you can register below.
+        </p>
+
+        {error && (
+          <p className="text-red-500 mb-4 text-sm text-center">{error}</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 text-sm font-medium mb-1">
               Email
-            </div>
+            </label>
             <input
               type="text"
-              placeholder="Email"
-              className="w-full p-1 mb-1 bg-base-200 rounded-lg"
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-base-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               value={email}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <div className="block text-gray-700 text-xs font-semibold mb-2">
+          </div>
+
+          <div>
+            <label className="block text-gray-700 text-sm font-medium mb-1">
               Password
-            </div>
+            </label>
             <input
               type="password"
-              placeholder="PASSWORD"
-              className="w-full p-1 mb-1 bg-base-200 rounded-lg"
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-base-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <div className="flex justify-between items-center mb-6 text-sm">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={keepSignedIn}
-                  onChange={(e) => setKeepSignedIn(e.target.checked)}
-                />
-                <span>KEEP ME SIGNED IN</span>
-              </label>
-              <Link to="/forgot-password" className="text-black">
-                FORGET YOUR PASSWORD
-              </Link>
-            </div> */}
-            <div className="flex justify-center mt-4">
-              <button
-                type="submit"
-                className="bg-blue hover:bg-blue text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                LOGIN
-              </button>
-            </div>
-          </form>
-          <p className="mt-5 text-center font-semibold text-sm">
-            DON'T HAVE AN ACCOUNT
-            <Link
-              to="/registerpage"
-              className="font-semibold text-blue ml-1 underline"
+          </div>
+
+          <div className="mt-6">
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
             >
-              SIGN UP
-            </Link>
-          </p>
-          <p className="mt-2 text-center font-semibold text-sm">
-            BACK TO 
-            <Link
-              to="/home"
-              className="font-semibold text-blue ml-1 underline"
-            >
-              HOME
-            </Link>
-          </p>
-        </div>
+              LOGIN
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

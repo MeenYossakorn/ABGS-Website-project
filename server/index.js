@@ -174,6 +174,7 @@ app.post("/admin/login", async (req, res) => {
   try {
     if (!(email && password)) {
       return res.status(400).json({
+        status:"400",
         message: "please fill in all fields.",
       });
     }
@@ -200,11 +201,11 @@ app.post("/admin/login", async (req, res) => {
           token: token,
         });
       }else{
-        return res.status(401).json({ message: "ีไม่สามารถเข้าใช้งานได้" });
+        return res.status(200).json({  status: "401",message: "ีไม่สามารถเข้าใช้งานได้" });
 
       }
     } else {
-      return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
+      return res.status(200).json({ status: "401", message: "รหัสผ่านไม่ถูกต้อง" });
     }
   } catch (error) {
     console.log(error.message);
@@ -214,14 +215,12 @@ app.post("/admin/login", async (req, res) => {
 
 app.post("/users/signInCar", async (req, res) => {
   const {
-    name,
-    surname,
+    // name,
+    // surname,
     province,
     brand,
     color,
     licensePlate,
-    driverLicense,
-    role,
     userId,
   } = req.body.formData || "";
 
@@ -229,14 +228,12 @@ app.post("/users/signInCar", async (req, res) => {
     // ตรวจสอบข้อมูลที่จำเป็นว่าครบถ้วนหรือไม่
     if (
       !(
-        name &&
-        surname &&
+        // name &&
+        // surname &&
         province &&
         brand &&
         color &&
-        licensePlate &&
-        driverLicense &&
-        role
+        licensePlate 
       )
     ) {
       return res.status(400).json({
@@ -247,14 +244,12 @@ app.post("/users/signInCar", async (req, res) => {
     // เพิ่มข้อมูลลง Firestore โดยใช้ uid เป็น document ID // merge: true เพื่อไม่ลบข้อมูลที่มีอยู่แล้ว
     await db.collection("carsRequest").doc().set(
       {
-        name: name,
-        surname: surname,
+        // name: name,
+        // surname: surname,
         province: province,
         brand: brand,
         color: color,
         licensePlate: licensePlate,
-        driverLicense: driverLicense,
-        role: role,
         userId: userId,
         status: 0,
         dateExpire: null,
@@ -266,8 +261,9 @@ app.post("/users/signInCar", async (req, res) => {
     // ส่งสถานะกลับหลังจากบันทึกข้อมูลสำเร็จ
     return res.status(200).json({
       status: "success",
-      name: name,
-      surname: surname,
+      userId: userId,
+      // name: name,
+      // surname: surname,
     });
   } catch (error) {
     console.error("Error saving user car data: ", error);

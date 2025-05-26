@@ -6,6 +6,7 @@ import { auth } from "../Auth/firebase";
 import config from "../config/config.json";
 
 const RegisterPage = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -31,13 +32,17 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true)
     try {
       const regex = /^[0-9]+$/;
       if (isFormEmpty()) {
+        setIsSubmitting(false)
         throw new Error("please fill in all fields.");
       } else if (!regex.test(formData.telephone)) {
+        setIsSubmitting(false)
         throw new Error("Please enter your number");
       } else if (formData.password.length < 6) {
+        setIsSubmitting(false)
         throw new Error(
           "The password must be a string with at least 6 characters."
         );
@@ -144,6 +149,7 @@ const RegisterPage = () => {
                 <button
                   className="bg-blue hover:bg-blue-600 text-white font-bold py-2 px-12 rounded-xl focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105"
                   type="submit"
+                  disabled={isSubmitting}
                 >
                   SIGN UP
                 </button>

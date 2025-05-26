@@ -10,7 +10,7 @@ export default function Home() {
   const { user } = useAuth();
   return (
     <>
-      <div>
+      {/* <div>
         {user ? (
           <>
             <p>Email: {user.email}</p>
@@ -19,7 +19,7 @@ export default function Home() {
         ) : (
           <p>No user is logged in</p>
         )}
-      </div>
+      </div> */}
       <Navbar />
       <Content />
       <Footer />
