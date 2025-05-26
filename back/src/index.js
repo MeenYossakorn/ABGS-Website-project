@@ -8,15 +8,26 @@ import reportWebVitals from "./reportWebVitals";
 import Home from "../src/Page/Home";
 import LoginPage from "./LoginPage/LoginPage"
 import LogoutOnClose from "./LoginPage/Logoutonclose";
+import PrivateRoute from "./Auth/PrivateRoute";
+import Allcar from "./Content/Allcar";
+import Alluser from "./Content/Alluser";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: <PrivateRoute element={<LoginPage />} a={true} />,
   },
   {
     path: "/home",
-    element: <Home />,
+    element: <PrivateRoute element={ <Home />} a = {false}/>,
+  },
+  {
+    path: "/Allcar",
+    element: <PrivateRoute element={ <Allcar />} a = {false}/>,
+  },
+  {
+    path: "/Alluser",
+    element: <PrivateRoute element={ <Alluser />} a = {false}/>,
   },
 ]);
 // const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -26,6 +37,7 @@ const router = createBrowserRouter([
 //   </React.StrictMode>
 // );
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
     <React.StrictMode>
       <LogoutOnClose/>
