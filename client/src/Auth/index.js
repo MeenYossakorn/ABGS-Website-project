@@ -20,9 +20,9 @@ const useAuth = () => {
   // ฟังก์ชันอัปเดตผู้ใช้ด้วย custom token
   const updateUserWithToken = async (token) => {
     try {
-      // ทำการล็อกอินด้วย custom token
+      
       const result = await doSignInWithCustomToken(auth, token);
-      setUser(result.user); // อัปเดตค่าผู้ใช้ทันทีหลังจากล็อกอินสำเร็จ
+      setUser(result.user);
       setToken(result.token);
     } catch (error) {
       console.error('Error logging in with custom token:', error);
