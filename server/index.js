@@ -262,8 +262,6 @@ app.post("/users/signInCar", async (req, res) => {
     // เพิ่มข้อมูลลง Firestore โดยใช้ uid เป็น document ID // merge: true เพื่อไม่ลบข้อมูลที่มีอยู่แล้ว
     await db.collection("carsRequest").doc().set(
       {
-        // name: name,
-        // surname: surname,
         province: province,
         brand: brand,
         color: color,
@@ -355,8 +353,11 @@ app.get("/get/allCars", async (req, res) => {
     if (snapshot.empty) {
       return res.status(404).json({ message: "No users found" });
     }
-
-    const usersList = snapshot.docs.map((doc) => doc.data());
+    console;
+    const usersList = snapshot.docs.map((doc) => ({
+      docid: doc.id,
+      ...doc.data(),
+    }));
 
     res.status(200).json({ status: "success", data: usersList });
   } catch (error) {
@@ -371,8 +372,8 @@ app.post("/User/SaveChange", async (req, res) => {
   try {
     const { uid, role, name, surname, telephone, email } =
       req.body.selectedUser || "";
-      if (!uid) {
-      return res.status(400).json({ status:"400",message: "UID ไม่ถูกต้อง" });
+    if (!uid) {
+      return res.status(400).json({ status: "400", message: "UID ไม่ถูกต้อง" });
     }
     const userRef = db.collection("users").doc(uid);
     await userRef.update({
@@ -383,7 +384,7 @@ app.post("/User/SaveChange", async (req, res) => {
       email,
       updatedAt: new Date(),
     });
-    res.status(200).json({status:"200",message: "อัปเดตข้อมูลสำเร็จ" })
+    res.status(200).json({ status: "200", message: "อัปเดตข้อมูลสำเร็จ" });
   } catch (error) {
     console.log(error);
     res
@@ -391,6 +392,34 @@ app.post("/User/SaveChange", async (req, res) => {
       .json({ message: "Error fetching user data", error: error.message });
   }
 });
+app.post("/Car/SaveChange", async (req, res) => {
+  try {
+    const { userId, licensePlate, brand, color, dateExpire, province, status ,docid} =
+      req.body.selectedCar || "";
+    if (!userId) {
+      return res.status(400).json({ status: "400", message: "UID ไม่ถูกต้อง" });
+    }
+    const userRef = db.collection("carsRequest").doc(docid);
+    await userRef.update({
+      docid,
+      userId,
+      licensePlate,
+      brand,
+      color,
+      dateExpire,
+      province,
+      status,
+      updatedAt: new Date(),
+    });
+    res.status(200).json({ status: "200", message: "อัปเดตข้อมูลสำเร็จ" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching user data", error: error.message });
+  }
+});
+
 app.listen(port, (req, res) => {
   console.log("http server run at " + port);
 });
